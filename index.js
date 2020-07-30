@@ -18,6 +18,9 @@ function Dom(html) {
 }
 module.exports = Dom;
 
+if(global.$){
+	$.Dom = Dom;
+}
 // // /**
 // //  * 使用jsdom将html跟jquery组装成dom
 // //  * @param  {String}   html     需要处理的html

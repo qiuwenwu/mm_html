@@ -1,6 +1,6 @@
 {
     "name": "mm_html",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "这是超级美眉用于服务端解析html模块",
     "main": "index.js",
     "scripts": {
@@ -25,7 +25,8 @@
     "dependencies": {
         "jquery": "^3.4.1",
         "jsdom": "^15.2.1",
-        "mm_expand": "^1.4.7"
+        "mm_expand": "^1.5.0",
+        "mm_https": "^1.4.4"
     },
     "devDependencies": {}
 }

@@ -3,8 +3,8 @@ var Http = require('mm_https');
 var Html = require('./index.js');
 var fs = require("fs");
 
-function file(html){
-	return html.replace(/<[^<>]+>/g,'')
+function file(html_str){
+	return html_str.replace(/<[^<>]+>/g,'')
 }
 
 function model(o) {
@@ -28,7 +28,8 @@ async function get_stock (page) {
 	var res = await hp.get(url);
 	
 	// 使用jquery读取节点内容
-	var jq = Html(res.body);
+	var html = new Html();
+	var jq = html.toJQ(res.body);
 	// 获取到单行数据
 	var trs = jq('#NewStockTable tbody tr');
 	var len = trs.length;
@@ -52,8 +53,7 @@ async function get_pages () {
 	var url = `http://vip.stock.finance.sina.com.cn/corp/view/vRPD_NewStockIssue.php?page=1&cngem=0&orderBy=NetDate&orderType=desc`;
 	var res = await hp.get(url);
 	
-	var html = res.body;
-	var mh = html.match(/共[0-9]+页/);
+	var mh = res.body.match(/共[0-9]+页/);
 	if(mh){
 		var num = mh[0].replace('共', '').replace('页', '');
 		return Number(num);

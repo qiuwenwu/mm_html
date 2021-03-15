@@ -70,7 +70,9 @@
                                                 {
                                                     "tag": "div",
                                                     "attr": {
-                                                        "class": "accounts col-md-9 col-6"
+                                                        "class": "accounts col-md-9 col-6",
+                                                        ":test": "ttt",
+                                                        "v-model": "query.phone"
                                                     },
                                                     "sub": [
                                                         {

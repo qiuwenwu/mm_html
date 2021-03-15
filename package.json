@@ -1,6 +1,6 @@
 {
     "name": "mm_html",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "description": "这是超级美眉用于服务端解析html模块",
     "main": "index.js",
     "scripts": {

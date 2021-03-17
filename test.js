@@ -17,12 +17,12 @@ async function test(file) {
 // 				</div>
 // 				<div v-model="form.think"><p>ccc</p>123123</div>
 // 			</div>`;
+
 	var json = dom.toJson(text);
 	'./demo_dict.json'.saveJson(json, true);
 	
 	var str = dom.toHtml(json);
 	'./demo_dict.html'.saveText(str);
-	console.log(json);
 }
 
 test('./demo.html');

@@ -18,14 +18,15 @@ class Dom {
 	 */
 	constructor(config) {
 		this.config = {
-			tags_text: ["i", "strong", "span", "small", "em", "sup", "sub"],
+			tags_text: ["i", "strong", "span", "small", "em", "sup", "sub", "del"],
 			tags_col: ["li", "dd", "td"],
 			tags_hp: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "button", "canvas", "video"],
-			tags_left:  ["img", "link", "input", "br", "meta", "hr"],
+			tags_left: ["img", "link", "input", "br", "meta", "hr"],
 			tags_no: ["img", "audio", "input", "meta", "col", "colgroup", "datalist", "ul", "ol", "dl", "dl", "table",
 				"thead", "tbody", "tfoot", "tr", "select"
 			],
-			tags_only: ["img", "i", "strong", "span", "small", "em", "sup"]
+			tags_only: ["img", "i", "strong", "span", "small", "em", "sup"],
+			tags_container: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "a", "td", "li", "dt", "dd", "button"]
 		}
 	}
 }
@@ -63,12 +64,25 @@ Dom.prototype.recursively = function(node) {
 	} catch {
 
 	}
-	if(tag === "script" || tag === "style" || tag === "title"){
+	if (tag === "script" || tag === "style" || tag === "title") {
 		dict.text = node.text();
-	}
-	else {
-		var sub = [];
+	} else if(!node.children().length){
+		var tags = this.config.tags_container;
+		var text = node.text();
+		if(tags.indexOf(tag) !== -1){
+			dict.sub = [{
+				tag: "span",
+				attr: {
+					class: "text"
+				},
+				text
+			}]
+		} else {
+			dict.text = text;
+		}
+	} else {
 		var child = node.contents();
+		var sub = [];
 		for (var i = 0; i < child.length; i++) {
 			var o = child.eq(i);
 			if (o.prop('tagName')) {
@@ -93,7 +107,7 @@ Dom.prototype.recursively = function(node) {
 			dict.sub = sub;
 		}
 	}
-	
+
 	return dict;
 };
 
@@ -116,7 +130,7 @@ Dom.prototype.getAttrs = function(node) {
 		if (str) {
 			var key = str.left('=', true).trim();
 			var value = str.right('=').trim('"');
-			dict[key] = value || key;
+			dict[key] = value || '';
 		}
 	}
 	return dict;
@@ -152,10 +166,9 @@ Dom.prototype.toHtml = function(json, tab = "\t") {
 			attr_str += " " + k + '="' + value + '"';
 		}
 	}
-	if(this.config.tags_left.indexOf(tag) !== -1){
+	if (this.config.tags_left.indexOf(tag) !== -1) {
 		return `<${tag}${attr_str} />`
-	}
-	else {
+	} else {
 		var sub_str = "";
 		var sub = json.sub;
 		if (sub) {
@@ -164,11 +177,11 @@ Dom.prototype.toHtml = function(json, tab = "\t") {
 				sub_str += "\n" + tab + this.toHtml(o, tab + "\t")
 			}
 		}
-		if(sub_str){
+		if (sub_str) {
 			sub_str += '\n' + tab.substring(1);
 		}
 		var text = "";
-		if(json.text){
+		if (json.text) {
 			text = json.text;
 		}
 		return `<${tag}${attr_str}>${sub_str}${text}</${tag}>`;
